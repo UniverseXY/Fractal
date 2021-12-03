@@ -10,18 +10,23 @@ import java.awt.Dimension
 import java.awt.Rectangle
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import javax.swing.GroupLayout
+import javax.swing.JButton
 import javax.swing.JFrame
 
 class MainFrame : JFrame() {
-
+    val animFrame : AnimationFrame
     val fractalPanel: GraphicsPanel
-
+    val openAnimFrame : JButton
     init{
         defaultCloseOperation = EXIT_ON_CLOSE
         minimumSize = Dimension(600, 400)
+        openAnimFrame = JButton().apply {
+            text = "Открыть экскурсию"
+        }
         val plane = CartesianPlane(-2.0, 1.0, -1.0, 1.0)
-
         val colorizers = listOf(::grayFractal, ::pinkFractal)
         val painter = FractalPainter(Mandelbrot, plane, colorizers[1])
 
@@ -46,18 +51,26 @@ class MainFrame : JFrame() {
                 repaint()
             }
         }
+        animFrame = AnimationFrame(fractalPanel)
+        openAnimFrame.addMouseListener( object : MouseAdapter() {
+            override fun mouseClicked(e: MouseEvent?) {
+                animFrame.isVisible = true
+            }
+        })
 
         layout = GroupLayout(contentPane).apply {
             setHorizontalGroup(
                 createSequentialGroup()
                     .addGap(4)
                     .addComponent(fractalPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE)
+                    .addComponent(openAnimFrame, 100, 100, 100)
                     .addGap(4)
             )
             setVerticalGroup(
                 createSequentialGroup()
                     .addGap(4)
                     .addComponent(fractalPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE)
+                    .addComponent(openAnimFrame, 100, 100, 100)
                     .addGap(4)
             )
         }

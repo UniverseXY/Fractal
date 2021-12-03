@@ -29,11 +29,11 @@ class FractalPainter(
         val threadCount = 8
         val fracService = Executors.newFixedThreadPool(threadCount)
         with(plane) {
-            val sabW = 10
-            val cnt  =ceil(width.toFloat()/sabW).toInt()
+            val subW = 10
+            val cnt  =ceil(width.toFloat() / subW).toInt()
             List(cnt){ i->
              fracService.submit(Callable {
-                 val w = if (i == cnt -1) width%sabW else sabW
+                 val w = if (i == cnt -1) width % subW else subW
                  val img = BufferedImage(w, height, BufferedImage.TYPE_INT_RGB)
                  for (j in 0..height) {
                      val ig = img.graphics
@@ -41,7 +41,7 @@ class FractalPainter(
                          ig.color = colorFunction(
                              fractal.isInSet(
                                  complex(
-                                     xSct2Crt(k + i*sabW),
+                                     xSct2Crt(k + i*subW),
                                      ySct2Crt(j)
                                  )
                              )
@@ -52,7 +52,7 @@ class FractalPainter(
                 Pair(img, i)
             })
         }.forEach {
-                g.drawImage(it.get().first,it.get().second*sabW,0,null)
+                g.drawImage(it.get().first,it.get().second*subW,0,null)
             }
         }
     }

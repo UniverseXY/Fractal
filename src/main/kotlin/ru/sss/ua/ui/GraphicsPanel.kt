@@ -19,16 +19,16 @@ class GraphicsPanel(private val painters: List<Painter>): JPanel() {
     }
 
     fun addSelectListener(l: (Rectangle)->Unit){
-        seletListner.add ( l )
+        selectListner.add ( l )
     }
     fun removeSelectListner(l: (Rectangle)->Unit){
-        seletListner.remove ( l )
+        selectListner.remove ( l )
     }
 
 
     private var pt1: Point? = null
     private var pt2: Point? = null
-    private val seletListner: MutableList<((Rectangle)->Unit)> = mutableListOf()
+    private val selectListner: MutableList<((Rectangle)->Unit)> = mutableListOf()
 
     init {
         addComponentListener(object: ComponentAdapter(){
@@ -51,7 +51,7 @@ class GraphicsPanel(private val painters: List<Painter>): JPanel() {
                 pt1?.let { p1 ->
                     pt2?.let { p2 ->
                         var r: Rectangle = Rectangle(min(p1.x,p2.x),min(p1.y,p2.y), abs(p2.x - p1.x),abs(p2.y-p1.y))
-                        seletListner.forEach{ it(r)}
+                        selectListner.forEach{ it(r)}
                     }
                 }
                 pt1 = null
